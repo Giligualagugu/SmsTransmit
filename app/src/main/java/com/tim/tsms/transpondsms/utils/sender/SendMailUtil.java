@@ -1,7 +1,6 @@
 package com.tim.tsms.transpondsms.utils.sender;
 
 import android.util.Log;
-
 import com.tim.tsms.transpondsms.utils.Define;
 import com.tim.tsms.transpondsms.utils.SettingUtil;
 
@@ -22,21 +21,21 @@ public class SendMailUtil {
 //    private static final String FROM_ADD = "xxxxxx@163.com";
 //    private static final String FROM_PSW = "xx";
 
-    public static void send(final File file,String toAdd,String title,String content){
-        Log.d(TAG,"send file to "+toAdd);
-        final MailInfo mailInfo = creatMail(toAdd,title,content);
+    public static void send(final File file, String toAdd, String title, String content) {
+        Log.d(TAG, "send file to " + toAdd);
+        final MailInfo mailInfo = creatMail(toAdd, title, content);
         final MailSender sms = new MailSender();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                sms.sendFileMail(mailInfo,file);
+                sms.sendFileMail(mailInfo, file);
             }
         }).start();
     }
 
-    public static void send(String toAdd,String title,String content){
-        Log.d(TAG,"send to "+toAdd);
-        final MailInfo mailInfo = creatMail(toAdd,title,content);
+    public static void send(String toAdd, String title, String content) {
+        Log.d(TAG, "send to " + toAdd);
+        final MailInfo mailInfo = creatMail(toAdd, title, content);
         final MailSender sms = new MailSender();
         new Thread(new Runnable() {
             @Override
@@ -46,8 +45,8 @@ public class SendMailUtil {
         }).start();
     }
 
-    private static MailInfo creatMail(String toAdd,String title,String content) {
-        Log.d(TAG,"creatMail to "+toAdd);
+    private static MailInfo creatMail(String toAdd, String title, String content) {
+        Log.d(TAG, "creatMail to " + toAdd);
         final MailInfo mailInfo = new MailInfo();
         mailInfo.setMailServerHost(SettingUtil.get_send_util_email(Define.SP_MSG_SEND_UTIL_EMAIL_HOST_KEY));
         mailInfo.setMailServerPort(SettingUtil.get_send_util_email(Define.SP_MSG_SEND_UTIL_EMAIL_PORT_KEY));
@@ -65,26 +64,24 @@ public class SendMailUtil {
 
 /**
  * public void sendFileMail(View view) {
- *
- *         File file = new File(Environment.getExternalStorageDirectory()+File.separator+"test.txt");
- *         OutputStream os = null;
- *         try {
- *             os = new FileOutputStream(file);
- *             String str = "hello world";
- *             byte[] data = str.getBytes();
- *             os.write(data);
- *         } catch (FileNotFoundException e) {
- *             e.printStackTrace();
- *         } catch (IOException e) {
- *             e.printStackTrace();
- *         }finally{
- *             try {
- *                 if (os != null)os.close();
- *             } catch (IOException e) {
- *             }
- *         }
- *         SendMailUtil.send(file,editText.getText().toString());
- *     }
- *
- *
+ * <p>
+ * File file = new File(Environment.getExternalStorageDirectory()+File.separator+"test.txt");
+ * OutputStream os = null;
+ * try {
+ * os = new FileOutputStream(file);
+ * String str = "hello world";
+ * byte[] data = str.getBytes();
+ * os.write(data);
+ * } catch (FileNotFoundException e) {
+ * e.printStackTrace();
+ * } catch (IOException e) {
+ * e.printStackTrace();
+ * }finally{
+ * try {
+ * if (os != null)os.close();
+ * } catch (IOException e) {
+ * }
+ * }
+ * SendMailUtil.send(file,editText.getText().toString());
+ * }
  */

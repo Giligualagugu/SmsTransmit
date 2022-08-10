@@ -8,15 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import com.tim.tsms.transpondsms.adapter.RuleAdapter;
 import com.tim.tsms.transpondsms.model.RuleModel;
 import com.tim.tsms.transpondsms.model.SenderModel;
@@ -39,14 +31,14 @@ public class RuleActivity extends AppCompatActivity {
     // 用于存储数据
     private List<RuleModel> ruleModels = new ArrayList<>();
     private RuleAdapter adapter;
-    private Long  selectSenderId=0l;
-    private String  selectSenderName="";
+    private Long selectSenderId = 0l;
+    private String selectSenderName = "";
 
     //消息处理者,创建一个Handler的子类对象,目的是重写Handler的处理消息的方法(handleMessage())
-    private Handler handler = new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case NOTIFY:
                     Toast.makeText(RuleActivity.this, msg.getData().getString("DATA"), Toast.LENGTH_LONG).show();
                     break;
@@ -76,7 +68,7 @@ public class RuleActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 RuleModel ruleModel = ruleModels.get(position);
-                Log.d(TAG, "onItemClick: "+ruleModel);
+                Log.d(TAG, "onItemClick: " + ruleModel);
                 setRule(ruleModel);
             }
         });
@@ -116,6 +108,7 @@ public class RuleActivity extends AppCompatActivity {
 
 
     }
+
     // 初始化数据
     private void initRules() {
         ruleModels = RuleUtil.getRule(null, null);
@@ -131,16 +124,16 @@ public class RuleActivity extends AppCompatActivity {
         final View view1 = View.inflate(RuleActivity.this, R.layout.activity_alter_dialog_setview_rule, null);
 
         final RadioGroup radioGroupRuleFiled = (RadioGroup) view1.findViewById(R.id.radioGroupRuleFiled);
-        if(ruleModel!=null)radioGroupRuleFiled.check(ruleModel.getRuleFiledCheckId());
+        if (ruleModel != null) radioGroupRuleFiled.check(ruleModel.getRuleFiledCheckId());
 
         final RadioGroup radioGroupRuleCheck = (RadioGroup) view1.findViewById(R.id.radioGroupRuleCheck);
-        if(ruleModel!=null)radioGroupRuleCheck.check(ruleModel.getRuleCheckCheckId());
-        
+        if (ruleModel != null) radioGroupRuleCheck.check(ruleModel.getRuleCheckCheckId());
+
         final TextView tv_mu_rule_tips = (TextView) view1.findViewById(R.id.tv_mu_rule_tips);
         final TextView ruleSenderTv = (TextView) view1.findViewById(R.id.ruleSenderTv);
-        if(ruleModel!=null && ruleModel.getSenderId()!=null){
-            List<SenderModel> getSeners = SenderUtil.getSender(ruleModel.getSenderId(),null);
-            if(!getSeners.isEmpty()){
+        if (ruleModel != null && ruleModel.getSenderId() != null) {
+            List<SenderModel> getSeners = SenderUtil.getSender(ruleModel.getSenderId(), null);
+            if (!getSeners.isEmpty()) {
                 ruleSenderTv.setText(getSeners.get(0).getName());
                 ruleSenderTv.setTag(getSeners.get(0).getId());
             }
@@ -149,7 +142,7 @@ public class RuleActivity extends AppCompatActivity {
         btSetRuleSender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(RuleActivity.this,"selectSender",Toast.LENGTH_LONG).show();
+                Toast.makeText(RuleActivity.this, "selectSender", Toast.LENGTH_LONG).show();
                 selectSender(ruleSenderTv);
             }
         });
@@ -159,7 +152,7 @@ public class RuleActivity extends AppCompatActivity {
             editTextRuleValue.setText(ruleModel.getValue());
 
         //当更新选择的字段的时候，更新之下各个选项的状态
-        refreshSelectRadioGroupRuleFiled(radioGroupRuleFiled, radioGroupRuleCheck, editTextRuleValue,tv_mu_rule_tips);
+        refreshSelectRadioGroupRuleFiled(radioGroupRuleFiled, radioGroupRuleCheck, editTextRuleValue, tv_mu_rule_tips);
 
         Button buttonruleok = view1.findViewById(R.id.buttonruleok);
         Button buttonruledel = view1.findViewById(R.id.buttonruledel);
@@ -178,7 +171,7 @@ public class RuleActivity extends AppCompatActivity {
                     newRuleModel.setFiled(RuleModel.getRuleFiledFromCheckId(radioGroupRuleFiled.getCheckedRadioButtonId()));
                     newRuleModel.setCheck(RuleModel.getRuleCheckFromCheckId(radioGroupRuleCheck.getCheckedRadioButtonId()));
                     newRuleModel.setValue(editTextRuleValue.getText().toString());
-                    if(senderId!=null){
+                    if (senderId != null) {
                         newRuleModel.setSenderId(Long.valueOf(senderId.toString()));
                     }
                     RuleUtil.addRule(newRuleModel);
@@ -188,7 +181,7 @@ public class RuleActivity extends AppCompatActivity {
                     ruleModel.setFiled(RuleModel.getRuleFiledFromCheckId(radioGroupRuleFiled.getCheckedRadioButtonId()));
                     ruleModel.setCheck(RuleModel.getRuleCheckFromCheckId(radioGroupRuleCheck.getCheckedRadioButtonId()));
                     ruleModel.setValue(editTextRuleValue.getText().toString());
-                    if(senderId!=null){
+                    if (senderId != null) {
                         ruleModel.setSenderId(Long.valueOf(senderId.toString()));
                     }
                     RuleUtil.updateRule(ruleModel);
@@ -216,9 +209,9 @@ public class RuleActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Object senderId = ruleSenderTv.getTag();
-                if(senderId==null){
-                    Toast.makeText(RuleActivity.this,"请先创建选择发送方",Toast.LENGTH_LONG).show();
-                }else{
+                if (senderId == null) {
+                    Toast.makeText(RuleActivity.this, "请先创建选择发送方", Toast.LENGTH_LONG).show();
+                } else {
                     if (ruleModel == null) {
                         RuleModel newRuleModel = new RuleModel();
                         newRuleModel.setFiled(RuleModel.getRuleFiledFromCheckId(radioGroupRuleFiled.getCheckedRadioButtonId()));
@@ -226,7 +219,7 @@ public class RuleActivity extends AppCompatActivity {
                         newRuleModel.setValue(editTextRuleValue.getText().toString());
                         newRuleModel.setSenderId(Long.valueOf(senderId.toString()));
 
-                        testRule(newRuleModel,Long.valueOf(senderId.toString()));
+                        testRule(newRuleModel, Long.valueOf(senderId.toString()));
 
                     } else {
                         ruleModel.setFiled(RuleModel.getRuleFiledFromCheckId(radioGroupRuleFiled.getCheckedRadioButtonId()));
@@ -234,10 +227,9 @@ public class RuleActivity extends AppCompatActivity {
                         ruleModel.setValue(editTextRuleValue.getText().toString());
                         ruleModel.setSenderId(Long.valueOf(senderId.toString()));
 
-                        testRule(ruleModel,Long.valueOf(senderId.toString()));
+                        testRule(ruleModel, Long.valueOf(senderId.toString()));
 
                     }
-
 
 
                 }
@@ -250,36 +242,37 @@ public class RuleActivity extends AppCompatActivity {
     //当更新选择的字段的时候，更新之下各个选项的状态
     // 如果设置了转发全部，禁用选择模式和匹配值输入
     // 如果设置了多重规则，选择模式置为是
-    private void refreshSelectRadioGroupRuleFiled(RadioGroup radioGroupRuleFiled, final RadioGroup radioGroupRuleCheck, final EditText editTextRuleValue, final TextView tv_mu_rule_tips){
-        refreshSelectRadioGroupRuleFiledAction(radioGroupRuleFiled.getCheckedRadioButtonId(),radioGroupRuleCheck,editTextRuleValue,tv_mu_rule_tips);
+    private void refreshSelectRadioGroupRuleFiled(RadioGroup radioGroupRuleFiled, final RadioGroup radioGroupRuleCheck, final EditText editTextRuleValue, final TextView tv_mu_rule_tips) {
+        refreshSelectRadioGroupRuleFiledAction(radioGroupRuleFiled.getCheckedRadioButtonId(), radioGroupRuleCheck, editTextRuleValue, tv_mu_rule_tips);
 
         radioGroupRuleFiled.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                refreshSelectRadioGroupRuleFiledAction(checkedId,radioGroupRuleCheck,editTextRuleValue,tv_mu_rule_tips);
+                refreshSelectRadioGroupRuleFiledAction(checkedId, radioGroupRuleCheck, editTextRuleValue, tv_mu_rule_tips);
             }
         });
     }
-    private void refreshSelectRadioGroupRuleFiledAction(int checkedRuleFiledId, final RadioGroup radioGroupRuleCheck, final EditText editTextRuleValue, final TextView tv_mu_rule_tips){
+
+    private void refreshSelectRadioGroupRuleFiledAction(int checkedRuleFiledId, final RadioGroup radioGroupRuleCheck, final EditText editTextRuleValue, final TextView tv_mu_rule_tips) {
         tv_mu_rule_tips.setVisibility(View.GONE);
 
-        switch (checkedRuleFiledId){
+        switch (checkedRuleFiledId) {
             case R.id.btnTranspondAll:
-                for(int i = 0; i < radioGroupRuleCheck.getChildCount(); i++){
-                    ((RadioButton)radioGroupRuleCheck.getChildAt(i)).setEnabled(false);
+                for (int i = 0; i < radioGroupRuleCheck.getChildCount(); i++) {
+                    ((RadioButton) radioGroupRuleCheck.getChildAt(i)).setEnabled(false);
                 }
                 editTextRuleValue.setEnabled(false);
                 break;
             case R.id.btnMultiMatch:
-                for(int i = 0; i < radioGroupRuleCheck.getChildCount(); i++){
-                    ((RadioButton)radioGroupRuleCheck.getChildAt(i)).setEnabled(false);
+                for (int i = 0; i < radioGroupRuleCheck.getChildCount(); i++) {
+                    ((RadioButton) radioGroupRuleCheck.getChildAt(i)).setEnabled(false);
                 }
                 editTextRuleValue.setEnabled(true);
                 tv_mu_rule_tips.setVisibility(View.VISIBLE);
                 break;
             default:
-                for(int i = 0; i < radioGroupRuleCheck.getChildCount(); i++){
-                    ((RadioButton)radioGroupRuleCheck.getChildAt(i)).setEnabled(true);
+                for (int i = 0; i < radioGroupRuleCheck.getChildCount(); i++) {
+                    ((RadioButton) radioGroupRuleCheck.getChildAt(i)).setEnabled(true);
                 }
                 editTextRuleValue.setEnabled(true);
                 break;
@@ -287,14 +280,14 @@ public class RuleActivity extends AppCompatActivity {
     }
 
     public void selectSender(final TextView showTv) {
-        final List<SenderModel> senderModels = SenderUtil.getSender(null,null);
-        if(senderModels.isEmpty()){
+        final List<SenderModel> senderModels = SenderUtil.getSender(null, null);
+        if (senderModels.isEmpty()) {
             Toast.makeText(RuleActivity.this, "请先去设置发送方页面添加", Toast.LENGTH_SHORT).show();
             return;
         }
-        final CharSequence[] senderNames= new CharSequence[senderModels.size()];
-        for (int i=0;i<senderModels.size();i++){
-            senderNames[i]=senderModels.get(i).getName();
+        final CharSequence[] senderNames = new CharSequence[senderModels.size()];
+        for (int i = 0; i < senderModels.size(); i++) {
+            senderNames[i] = senderModels.get(i).getName();
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(RuleActivity.this);
         builder.setTitle("选择发送方");
@@ -312,7 +305,7 @@ public class RuleActivity extends AppCompatActivity {
     public void testRule(final RuleModel ruleModel, final Long senderId) {
         final View view = View.inflate(RuleActivity.this, R.layout.activity_alter_dialog_setview_rule_test, null);
         final EditText editTextTestPhone = (EditText) view.findViewById(R.id.editTextTestPhone);
-        final EditText editTextTestMsgContent = (EditText)view.findViewById(R.id.editTextTestMsgContent);
+        final EditText editTextTestMsgContent = (EditText) view.findViewById(R.id.editTextTestMsgContent);
         Button buttonruletest = view.findViewById(R.id.buttonruletest);
         AlertDialog.Builder ad1 = new AlertDialog.Builder(RuleActivity.this);
         ad1.setTitle("测试规则");
@@ -325,12 +318,12 @@ public class RuleActivity extends AppCompatActivity {
                 Log.i("editTextTestPhone", editTextTestPhone.getText().toString());
                 Log.i("editTextTestMsgContent", editTextTestMsgContent.getText().toString());
 
-                try{
-                    SmsVo testSmsVo=new SmsVo(editTextTestPhone.getText().toString(),editTextTestMsgContent.getText().toString(),new Date(),new SmsExtraVo(1,"卡哇伊","红色白皮手机"));
-                    SendUtil.sendMsgByRuleModelSenderId(handler,ruleModel,testSmsVo,senderId);
+                try {
+                    SmsVo testSmsVo = new SmsVo(editTextTestPhone.getText().toString(), editTextTestMsgContent.getText().toString(), new Date(), new SmsExtraVo(1, "卡哇伊", "红色白皮手机"));
+                    SendUtil.sendMsgByRuleModelSenderId(handler, ruleModel, testSmsVo, senderId);
 
-                }catch (Exception e){
-                    Toast.makeText(RuleActivity.this,e.getMessage(),Toast.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    Toast.makeText(RuleActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });

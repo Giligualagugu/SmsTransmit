@@ -16,9 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-
-
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.tim.tsms.transpondsms.BroadCastReceiver.TSMSBroadcastReceiver;
 import com.tim.tsms.transpondsms.adapter.LogAdapter;
 import com.tim.tsms.transpondsms.model.vo.LogVo;
@@ -35,13 +33,13 @@ public class MainActivity extends AppCompatActivity implements ReFlashListView.I
     private TSMSBroadcastReceiver smsBroadcastReceiver;
     private String TAG = "MainActivity";
     // logVoList用于存储数据
-    private List<LogVo> logVos =new ArrayList<>();
+    private List<LogVo> logVos = new ArrayList<>();
     private LogAdapter adapter;
     private ReFlashListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG,"oncreate");
+        Log.d(TAG, "oncreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         LogUtil.init(this);
@@ -54,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements ReFlashListView.I
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                LogVo logVo= logVos.get(position-1);
+                LogVo logVo = logVos.get(position - 1);
                 logDetail(logVo);
 //                Toast.makeText(MainActivity.this,String.valueOf(position),Toast.LENGTH_SHORT).show();
             }
@@ -74,17 +72,17 @@ public class MainActivity extends AppCompatActivity implements ReFlashListView.I
     }
 
     // 初始化数据
-    private void initTLogs(){
-        logVos= LogUtil.getLog(null,null);
+    private void initTLogs() {
+        logVos = LogUtil.getLog(null, null);
     }
 
     private void showList(List<LogVo> logVosN) {
-        Log.d(TAG, "showList: "+logVosN);
+        Log.d(TAG, "showList: " + logVosN);
         if (adapter == null) {
             // 将适配器上的数据传递给listView
-            listView=findViewById(R.id.list_view_log);
+            listView = findViewById(R.id.list_view_log);
             listView.setInterface(this);
-            adapter=new LogAdapter(MainActivity.this,R.layout.tlog_item, logVosN);
+            adapter = new LogAdapter(MainActivity.this, R.layout.tlog_item, logVosN);
 
             listView.setAdapter(adapter);
         } else {
@@ -112,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements ReFlashListView.I
 
     @Override
     protected void onDestroy() {
-        Log.d(TAG,"onDestroy");
+        Log.d(TAG, "onDestroy");
         super.onDestroy();
         //取消注册广播
         unregisterReceiver(smsBroadcastReceiver);
@@ -122,49 +120,49 @@ public class MainActivity extends AppCompatActivity implements ReFlashListView.I
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("详情");
         SmsExtraVo smsExtraVo = JSON.parseObject(logVo.getJsonExtra(), SmsExtraVo.class);
-        String extraStr="";
-        if(smsExtraVo!=null && smsExtraVo.getSimDesc()!=null){
-            extraStr="卡："+smsExtraVo.getSimDesc()+"\n";
+        String extraStr = "";
+        if (smsExtraVo != null && smsExtraVo.getSimDesc() != null) {
+            extraStr = "卡：" + smsExtraVo.getSimDesc() + "\n";
         }
 
-        builder.setMessage(logVo.getFrom()+"\n"+logVo.getContent()+"\n"+logVo.getRule()+"\n"+extraStr+logVo.getTime());
+        builder.setMessage(logVo.getFrom() + "\n" + logVo.getContent() + "\n" + logVo.getRule() + "\n" + extraStr + logVo.getTime());
         builder.show();
     }
 
-    public void toAbout(){
+    public void toAbout() {
         Intent intent = new Intent(this, AboutActivity.class);
         startActivity(intent);
     }
 
-    public void toSetting(){
+    public void toSetting() {
         Intent intent = new Intent(this, SettingActivity.class);
         startActivity(intent);
     }
 
-    public void toRuleSetting(View view){
+    public void toRuleSetting(View view) {
         Intent intent = new Intent(this, RuleActivity.class);
         startActivity(intent);
     }
 
-    public void toSendSetting(View view){
+    public void toSendSetting(View view) {
         Intent intent = new Intent(this, SenderActivity.class);
         startActivity(intent);
     }
 
-    public void cleanLog(View view){
+    public void cleanLog(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("确定要清空转发记录吗？")
-        .setPositiveButton("清空", new DialogInterface.OnClickListener() {// 积极
+                .setPositiveButton("清空", new DialogInterface.OnClickListener() {// 积极
 
-            @Override
-            public void onClick(DialogInterface dialog,
-                                int which) {
-                // TODO Auto-generated method stub
-                LogUtil.delLog(null,null);
-                initTLogs();
-                adapter.add(logVos);
-            }
-        });
+                    @Override
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+                        // TODO Auto-generated method stub
+                        LogUtil.delLog(null, null);
+                        initTLogs();
+                        adapter.add(logVos);
+                    }
+                });
         builder.show();
 
     }
@@ -177,8 +175,8 @@ public class MainActivity extends AppCompatActivity implements ReFlashListView.I
         intent.addCategory(Intent.CATEGORY_HOME);
         startActivity(intent);
     }
-    private void  checkPermission()
-    {
+
+    private void checkPermission() {
         // 检查权限是否获取（android6.0及以上系统可能默认关闭权限，且没提示）
         PackageManager pm = getPackageManager();
         boolean permission_receive_boot = (PackageManager.PERMISSION_GRANTED == pm.checkPermission("android.permission.RECEIVE_BOOT_COMPLETED", this.getPackageName()));
@@ -186,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements ReFlashListView.I
 
         if (!(
                 permission_receive_boot
-                && permission_readsms
+                        && permission_readsms
         )) {
             ActivityCompat.requestPermissions(this, new String[]{
                     Manifest.permission.RECEIVE_BOOT_COMPLETED,

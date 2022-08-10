@@ -5,18 +5,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
-
 import com.tim.tsms.transpondsms.FrontService;
 import com.tim.tsms.transpondsms.utils.InitUtil;
 
 public class RebootBroadcastReceiver extends BroadcastReceiver {
     private String TAG = "RebootBroadcastReceiver";
+
     @Override
     public void onReceive(Context context, Intent intent) {
         String receiveAction = intent.getAction();
-        Log.d(TAG,"onReceive intent "+receiveAction);
-        if(receiveAction.equals("android.intent.action.BOOT_COMPLETED")){
-            Log.d(TAG,"BOOT_COMPLETED");
+        Log.d(TAG, "onReceive intent " + receiveAction);
+        if (receiveAction.equals("android.intent.action.BOOT_COMPLETED")) {
+            Log.d(TAG, "BOOT_COMPLETED");
 
             InitUtil.init(context);
             Intent frontServiceIntent = new Intent(context, FrontService.class);

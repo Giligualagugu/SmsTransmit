@@ -7,7 +7,7 @@ public class LogModel {
     private Long time;
     private String jsonExtra;
 
-    public LogModel(String from, String content,Long ruleId,String jsonExtra) {
+    public LogModel(String from, String content, Long ruleId, String jsonExtra) {
         this.from = from;
         this.content = content;
         this.ruleId = ruleId;

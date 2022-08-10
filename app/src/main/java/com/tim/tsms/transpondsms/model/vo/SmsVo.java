@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class SmsVo implements Serializable{
+public class SmsVo implements Serializable {
     String mobile;
     String content;
     Date date;
@@ -52,20 +52,20 @@ public class SmsVo implements Serializable{
         this.smsExtraVo = smsExtraVo;
     }
 
-    public String getSmsVoForSend(){
-        String extraStr="";
-        if(smsExtraVo!=null){
-            if(smsExtraVo.getDeviceMark()!=null && !smsExtraVo.getDeviceMark().isEmpty()){
-                extraStr+="来自 "+smsExtraVo.getDeviceMark()+" ";
+    public String getSmsVoForSend() {
+        String extraStr = "";
+        if (smsExtraVo != null) {
+            if (smsExtraVo.getDeviceMark() != null && !smsExtraVo.getDeviceMark().isEmpty()) {
+                extraStr += "来自 " + smsExtraVo.getDeviceMark() + " ";
             }
-            if(smsExtraVo.getSimDesc()!=null && !smsExtraVo.getSimDesc().isEmpty()){
-                extraStr+="卡： "+smsExtraVo.getSimDesc()+ " \n";
+            if (smsExtraVo.getSimDesc() != null && !smsExtraVo.getSimDesc().isEmpty()) {
+                extraStr += "卡： " + smsExtraVo.getSimDesc() + " \n";
             }
         }
         return mobile + "\n" +
-               content + "\n" +
+                content + "\n" +
                 extraStr +
-               new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
     }
 
     @Override

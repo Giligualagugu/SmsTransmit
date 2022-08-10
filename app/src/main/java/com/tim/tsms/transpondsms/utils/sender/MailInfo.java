@@ -17,15 +17,15 @@ public class MailInfo {
     private String[] attachFileNames;// 邮件附件的文件名
 
 
-    public String toString(){
-        return "mailServerHost:"+this.mailServerHost
-                +"mailServerPort:"+this.mailServerPort
-                +"fromAddress:"+this.fromAddress
-                +"toAddress:"+this.toAddress
-                +"userName:"+this.userName
-                +"password:"+this.password
-                +"subject:"+this.subject
-                +"content:"+this.content;
+    public String toString() {
+        return "mailServerHost:" + this.mailServerHost
+                + "mailServerPort:" + this.mailServerPort
+                + "fromAddress:" + this.fromAddress
+                + "toAddress:" + this.toAddress
+                + "userName:" + this.userName
+                + "password:" + this.password
+                + "subject:" + this.subject
+                + "content:" + this.content;
     }
 
     /**
@@ -38,12 +38,11 @@ public class MailInfo {
         p.put("mail.smtp.auth", validate ? "true" : "false");
 
         // 设置SSL加密(未采用SSL时，端口一般为25，可以不用设置；采用SSL时，端口为465，需要显示设置)
-        if(ssl){
+        if (ssl) {
             p.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
             p.put("mail.smtp.socketFactory.fallback", "false");
             p.put("mail.smtp.socketFactory.port", this.mailServerPort);
         }
-
 
 
 //        props.setProperty("mail.smtp.port", "465");

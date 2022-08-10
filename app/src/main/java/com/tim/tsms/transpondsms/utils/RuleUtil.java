@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.util.Log;
-
 import com.tim.tsms.transpondsms.model.RuleModel;
 import com.tim.tsms.transpondsms.model.RuleTable;
 
@@ -15,15 +14,15 @@ import java.util.List;
 
 public class RuleUtil {
     static String TAG = "RuleUtil";
-    static Boolean hasInit=false;
+    static Boolean hasInit = false;
     static Context context;
     static DbHelper dbHelper;
     static SQLiteDatabase db;
 
     public static void init(Context context1) {
-        synchronized (hasInit){
-            if(hasInit)return;
-            hasInit=true;
+        synchronized (hasInit) {
+            if (hasInit) return;
+            hasInit = true;
             context = context1;
             dbHelper = new DbHelper(context);
             // Gets the data repository in write mode
@@ -47,7 +46,7 @@ public class RuleUtil {
     }
 
     public static long updateRule(RuleModel ruleModel) {
-        if(ruleModel==null) return 0;
+        if (ruleModel == null) return 0;
 
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
@@ -59,7 +58,7 @@ public class RuleUtil {
         String selection = RuleTable.RuleEntry._ID + " = ? ";
         String[] whereArgs = {String.valueOf(ruleModel.getId())};
 
-        return db.update(RuleTable.RuleEntry.TABLE_NAME,  values,selection,whereArgs);
+        return db.update(RuleTable.RuleEntry.TABLE_NAME, values, selection, whereArgs);
     }
 
     public static int delRule(Long id) {
@@ -67,9 +66,9 @@ public class RuleUtil {
         String selection = " 1 ";
         // Specify arguments in placeholder order.
         List<String> selectionArgList = new ArrayList<>();
-        if(id!=null){
+        if (id != null) {
             // Define 'where' part of query.
-            selection +=" and " + RuleTable.RuleEntry._ID + " = ? ";
+            selection += " and " + RuleTable.RuleEntry._ID + " = ? ";
             // Specify arguments in placeholder order.
             selectionArgList.add(String.valueOf(id));
 
@@ -80,7 +79,7 @@ public class RuleUtil {
 
     }
 
-    public static List<RuleModel> getRule(Long id,String key) {
+    public static List<RuleModel> getRule(Long id, String key) {
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
         String[] projection = {
@@ -95,16 +94,16 @@ public class RuleUtil {
         String selection = " 1 ";
         // Specify arguments in placeholder order.
         List<String> selectionArgList = new ArrayList<>();
-        if(id!=null){
+        if (id != null) {
             // Define 'where' part of query.
-            selection +=" and " + RuleTable.RuleEntry._ID + " = ? ";
+            selection += " and " + RuleTable.RuleEntry._ID + " = ? ";
             // Specify arguments in placeholder order.
             selectionArgList.add(String.valueOf(id));
         }
 
-        if(key!=null){
+        if (key != null) {
             // Define 'where' part of query.
-            selection =" and (" +  RuleTable.RuleEntry.COLUMN_NAME_VALUE + " LIKE ? )";
+            selection = " and (" + RuleTable.RuleEntry.COLUMN_NAME_VALUE + " LIKE ? )";
             // Specify arguments in placeholder order.
             selectionArgList.add(key);
         }
@@ -124,7 +123,7 @@ public class RuleUtil {
                 sortOrder               // The sort order
         );
         List<RuleModel> tRules = new ArrayList<>();
-        while(cursor.moveToNext()) {
+        while (cursor.moveToNext()) {
 
             long itemId = cursor.getLong(
                     cursor.getColumnIndexOrThrow(RuleTable.RuleEntry._ID));
@@ -139,7 +138,7 @@ public class RuleUtil {
             long itemTime = cursor.getLong(
                     cursor.getColumnIndexOrThrow(RuleTable.RuleEntry.COLUMN_NAME_TIME));
 
-            Log.d(TAG, "getRule: itemId"+itemId);
+            Log.d(TAG, "getRule: itemId" + itemId);
             RuleModel ruleModel = new RuleModel();
             ruleModel.setId(itemId);
             ruleModel.setFiled(itemFiled);

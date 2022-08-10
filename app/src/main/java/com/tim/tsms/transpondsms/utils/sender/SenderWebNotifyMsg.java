@@ -4,21 +4,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
-
-import java.io.IOException;
-import java.net.URLEncoder;
+import okhttp3.*;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import java.io.IOException;
+import java.net.URLEncoder;
 
 import static com.tim.tsms.transpondsms.SenderActivity.NOTIFY;
 
@@ -26,8 +17,8 @@ public class SenderWebNotifyMsg {
 
     static String TAG = "SenderWebNotifyMsg";
 
-    public static void sendMsg(final Handler handError, String token,  String secret, String from, String content) throws Exception {
-        Log.i(TAG, "sendMsg token:"+token+" from:"+from+" content:"+content);
+    public static void sendMsg(final Handler handError, String token, String secret, String from, String content) throws Exception {
+        Log.i(TAG, "sendMsg token:" + token + " from:" + from + " content:" + content);
 
         if (token == null || token.isEmpty()) {
             return;
@@ -36,9 +27,9 @@ public class SenderWebNotifyMsg {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("text/plain");
-        MultipartBody.Builder builder= new MultipartBody.Builder().setType(MultipartBody.FORM)
-                .addFormDataPart("from",from)
-                .addFormDataPart("content",content);
+        MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("from", from)
+                .addFormDataPart("content", content);
 
         if (secret != null && !secret.isEmpty()) {
             Long timestamp = System.currentTimeMillis();
@@ -49,8 +40,8 @@ public class SenderWebNotifyMsg {
             byte[] signData = mac.doFinal(stringToSign.getBytes("UTF-8"));
             String sign = URLEncoder.encode(new String(Base64.encode(signData, Base64.NO_WRAP)), "UTF-8");
             Log.i(TAG, "sign:" + sign);
-            builder.addFormDataPart("timestamp",String.valueOf(timestamp));
-            builder.addFormDataPart("sign",sign);
+            builder.addFormDataPart("timestamp", String.valueOf(timestamp));
+            builder.addFormDataPart("sign", sign);
         }
 
         RequestBody body = builder.build();
@@ -67,11 +58,11 @@ public class SenderWebNotifyMsg {
             public void onFailure(Call call, final IOException e) {
                 Log.d(TAG, "onFailure：" + e.getMessage());
 
-                if(handError != null){
+                if (handError != null) {
                     android.os.Message msg = new android.os.Message();
                     msg.what = NOTIFY;
                     Bundle bundle = new Bundle();
-                    bundle.putString("DATA","发送失败：" + e.getMessage());
+                    bundle.putString("DATA", "发送失败：" + e.getMessage());
                     msg.setData(bundle);
                     handError.sendMessage(msg);
                 }
@@ -83,11 +74,11 @@ public class SenderWebNotifyMsg {
                 final String responseStr = response.body().string();
                 Log.d(TAG, "Code：" + String.valueOf(response.code()) + responseStr);
 
-                if(handError != null){
+                if (handError != null) {
                     android.os.Message msg = new android.os.Message();
                     msg.what = NOTIFY;
                     Bundle bundle = new Bundle();
-                    bundle.putString("DATA","发送状态：" + responseStr);
+                    bundle.putString("DATA", "发送状态：" + responseStr);
                     msg.setData(bundle);
                     handError.sendMessage(msg);
                     Log.d(TAG, "Coxxyyde：" + String.valueOf(response.code()) + responseStr);

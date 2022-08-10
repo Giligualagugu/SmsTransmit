@@ -1,11 +1,11 @@
 package com.tim.tsms.transpondsms.utils;
 
 import android.util.Log;
-
 import com.tim.tsms.transpondsms.model.vo.SmsExtraVo;
 import com.tim.tsms.transpondsms.model.vo.SmsVo;
 
-import java.util.*;
+import java.util.Date;
+import java.util.Scanner;
 
 import static com.tim.tsms.transpondsms.utils.RuleLine.CONJUNCTION_AND;
 import static com.tim.tsms.transpondsms.utils.RuleLine.CONJUNCTION_OR;
@@ -22,7 +22,7 @@ public class RuleLineUtils {
                 "并且 是 手机号 相等 100861\n" +
                 "并且 是 手机号 相等 100861";
 
-        SmsVo msg = new SmsVo("10086", "哈哈哈", new Date(),new SmsExtraVo(1,"卡哇伊","红色白皮手机"));
+        SmsVo msg = new SmsVo("10086", "哈哈哈", new Date(), new SmsExtraVo(1, "卡哇伊", "红色白皮手机"));
         logg("check:" + checkRuleLines(msg, a));
     }
 

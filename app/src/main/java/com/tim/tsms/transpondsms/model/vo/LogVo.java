@@ -8,7 +8,7 @@ public class LogVo {
     private String time;
     private String jsonExtra;
 
-    public LogVo(String from, String content, String time, String rule,int senderImageId,String jsonExtra) {
+    public LogVo(String from, String content, String time, String rule, int senderImageId, String jsonExtra) {
         this.from = from;
         this.content = content;
         this.time = time;
@@ -53,16 +53,16 @@ public class LogVo {
         return senderImageId;
     }
 
+    public void setSenderImageId(int senderImageId) {
+        this.senderImageId = senderImageId;
+    }
+
     public String getJsonExtra() {
         return jsonExtra;
     }
 
     public void setJsonExtra(String jsonExtra) {
         this.jsonExtra = jsonExtra;
-    }
-
-    public void setSenderImageId(int senderImageId) {
-        this.senderImageId = senderImageId;
     }
 
     @Override

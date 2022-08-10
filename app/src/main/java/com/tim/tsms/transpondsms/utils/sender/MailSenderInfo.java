@@ -1,7 +1,6 @@
 package com.tim.tsms.transpondsms.utils.sender;
 
 import android.util.Log;
-
 import com.sun.mail.util.MailSSLSocketFactory;
 
 import java.security.GeneralSecurityException;
@@ -40,15 +39,15 @@ public class MailSenderInfo {
         props.put("mail.smtp.port", this.mailServerPort);
         props.put("mail.smtp.auth", validate ? "true" : "false");
 
-        if(ssl){
+        if (ssl) {
             try {
                 MailSSLSocketFactory sf = new MailSSLSocketFactory();
                 sf.setTrustAllHosts(true);
-                props.put("mail.smtp.ssl.enable","true");
-                props.put("mail.smtp.ssl.socketFactory",sf);
+                props.put("mail.smtp.ssl.enable", "true");
+                props.put("mail.smtp.ssl.socketFactory", sf);
                 Log.i(TAG, "set ssl success");
             } catch (GeneralSecurityException e) {
-                Log.e(TAG, "set ssl fail: "+e.getMessage());
+                Log.e(TAG, "set ssl fail: " + e.getMessage());
                 e.printStackTrace();
             }
         }

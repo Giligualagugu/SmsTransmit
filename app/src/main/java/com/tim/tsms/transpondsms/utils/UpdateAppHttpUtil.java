@@ -2,20 +2,17 @@ package com.tim.tsms.transpondsms.utils;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
-
-
 import com.vector.update_app.HttpManager;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.FileCallBack;
 import com.zhy.http.okhttp.callback.StringCallback;
+import okhttp3.Call;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-
-import okhttp3.Call;
-import okhttp3.Request;
-import okhttp3.Response;
 
 
 public class UpdateAppHttpUtil implements HttpManager {
@@ -28,9 +25,9 @@ public class UpdateAppHttpUtil implements HttpManager {
      */
     @Override
     public void asyncGet(@NonNull String url, @NonNull Map<String, String> params, @NonNull final HttpManager.Callback callBack) {
-        Log.i("UpdateAppHttpUtil","asyncGet"+url);
-        Map<String,String> headers = new HashMap<>();
-        headers.put("heada","bb");
+        Log.i("UpdateAppHttpUtil", "asyncGet" + url);
+        Map<String, String> headers = new HashMap<>();
+        headers.put("heada", "bb");
         OkHttpUtils.get()
                 .url(url)
                 .headers(headers)
@@ -39,13 +36,13 @@ public class UpdateAppHttpUtil implements HttpManager {
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Response response, Exception e, int id) {
-                        Log.i("UpdateAppHttpUtil","err response"+response);
+                        Log.i("UpdateAppHttpUtil", "err response" + response);
                         callBack.onError(validateError(e, response));
                     }
 
                     @Override
                     public void onResponse(String response, int id) {
-                        Log.i("UpdateAppHttpUtil","response"+response);
+                        Log.i("UpdateAppHttpUtil", "response" + response);
                         callBack.onResponse(response);
                     }
                 });
@@ -60,11 +57,11 @@ public class UpdateAppHttpUtil implements HttpManager {
      */
     @Override
     public void asyncPost(@NonNull String url, @NonNull Map<String, String> params, @NonNull final HttpManager.Callback callBack) {
-        Log.i("UpdateAppHttpUtil","asyncPost"+url);
+        Log.i("UpdateAppHttpUtil", "asyncPost" + url);
 
 //        params.put("gggg","hhhh");
-        Map<String,String> headers = new HashMap<>();
-        headers.put("heada","bb");
+        Map<String, String> headers = new HashMap<>();
+        headers.put("heada", "bb");
         OkHttpUtils.post()
                 .url(url)
                 .headers(headers)

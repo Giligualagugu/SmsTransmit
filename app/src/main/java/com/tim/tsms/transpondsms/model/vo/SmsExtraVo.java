@@ -2,7 +2,7 @@ package com.tim.tsms.transpondsms.model.vo;
 
 import java.io.Serializable;
 
-public class SmsExtraVo implements Serializable{
+public class SmsExtraVo implements Serializable {
     Integer simId;
     String simDesc;
     String deviceMark;

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-
 import com.tim.tsms.transpondsms.model.LogTable;
 import com.tim.tsms.transpondsms.model.RuleTable;
 import com.tim.tsms.transpondsms.model.SenderTable;
@@ -62,7 +61,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         for (String createEntries : SQL_CREATE_ENTRIES
         ) {
-            Log.d(TAG, "onCreate:createEntries "+createEntries);
+            Log.d(TAG, "onCreate:createEntries " + createEntries);
             db.execSQL(createEntries);
         }
     }
@@ -70,7 +69,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public void delCreateTable(SQLiteDatabase db) {
         for (String delCreateEntries : SQL_DELETE_ENTRIES
         ) {
-            Log.d(TAG, "delCreateTable:delCreateEntries "+delCreateEntries);
+            Log.d(TAG, "delCreateTable:delCreateEntries " + delCreateEntries);
             db.execSQL(delCreateEntries);
         }
     }

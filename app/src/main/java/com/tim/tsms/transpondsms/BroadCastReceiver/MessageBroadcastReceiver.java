@@ -8,18 +8,17 @@ import android.widget.Toast;
 
 
 public class MessageBroadcastReceiver extends BroadcastReceiver {
+    public static String EXTRA_DATA = "data";
+    public static String ACTION_DINGDING = "com.tim.tsms.transpondsms.action_dingding";
     private String TAG = "MessageBroadcastReceiver";
 
-    public static String EXTRA_DATA = "data";
-
-    public static String ACTION_DINGDING = "com.tim.tsms.transpondsms.action_dingding";
     @Override
     public void onReceive(Context arg0, Intent intent) {
-        Log.d(TAG,"onReceive intent "+intent.getAction());
+        Log.d(TAG, "onReceive intent " + intent.getAction());
         String action = intent.getAction();
-        if(action.equals(ACTION_DINGDING)){
+        if (action.equals(ACTION_DINGDING)) {
             String sendStatus = intent.getStringExtra(EXTRA_DATA);
-            Toast.makeText(arg0,"dingding sendStatus: "+sendStatus,Toast.LENGTH_LONG).show();
+            Toast.makeText(arg0, "dingding sendStatus: " + sendStatus, Toast.LENGTH_LONG).show();
         }
 
     }

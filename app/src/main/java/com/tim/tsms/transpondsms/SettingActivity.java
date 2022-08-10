@@ -1,73 +1,55 @@
 package com.tim.tsms.transpondsms;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
-import android.widget.Toast;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.tim.tsms.transpondsms.model.vo.FeedBackResult;
-import com.tim.tsms.transpondsms.utils.HttpI;
-import com.tim.tsms.transpondsms.utils.HttpUtil;
 import com.tim.tsms.transpondsms.utils.SettingUtil;
-import com.tim.tsms.transpondsms.utils.UpdateAppHttpUtil;
-import com.tim.tsms.transpondsms.utils.aUtil;
-import com.vector.update_app.UpdateAppManager;
-import com.vector.update_app.UpdateCallback;
-import com.vector.update_app.listener.ExceptionHandler;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class SettingActivity extends AppCompatActivity {
     private String TAG = "SettingActivity";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG,"oncreate");
+        Log.d(TAG, "oncreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        Switch switch_add_extra = (Switch)findViewById(R.id.switch_add_extra);
+        Switch switch_add_extra = (Switch) findViewById(R.id.switch_add_extra);
         switchAddExtra(switch_add_extra);
 
-        EditText et_add_extra_device_mark = (EditText)findViewById(R.id.et_add_extra_device_mark);
+        EditText et_add_extra_device_mark = (EditText) findViewById(R.id.et_add_extra_device_mark);
         editAddExtraDeviceMark(et_add_extra_device_mark);
 
-        EditText et_add_extra_sim1 = (EditText)findViewById(R.id.et_add_extra_sim1);
+        EditText et_add_extra_sim1 = (EditText) findViewById(R.id.et_add_extra_sim1);
         editAddExtraSim1(et_add_extra_sim1);
 
-        EditText et_add_extra_sim2 = (EditText)findViewById(R.id.et_add_extra_sim2);
+        EditText et_add_extra_sim2 = (EditText) findViewById(R.id.et_add_extra_sim2);
         editAddExtraSim2(et_add_extra_sim2);
-
 
 
     }
 
     //设置转发附加信息
-    private void switchAddExtra(Switch switch_add_extra){
+    private void switchAddExtra(Switch switch_add_extra) {
         switch_add_extra.setChecked(SettingUtil.getSwitchAddExtra());
 
         switch_add_extra.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SettingUtil.switchAddExtra(isChecked);
-                Log.d(TAG,"onCheckedChanged:"+isChecked);
+                Log.d(TAG, "onCheckedChanged:" + isChecked);
             }
         });
     }
 
     //设置转发附加信息devicemark
-    private void editAddExtraDeviceMark(final EditText et_add_extra_device_mark){
+    private void editAddExtraDeviceMark(final EditText et_add_extra_device_mark) {
         et_add_extra_device_mark.setText(SettingUtil.getAddExtraDeviceMark());
 
         et_add_extra_device_mark.addTextChangedListener(new TextWatcher() {
@@ -90,7 +72,7 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     //设置转发附加信息devicemark
-    private void editAddExtraSim1(final EditText et_add_extra_sim1){
+    private void editAddExtraSim1(final EditText et_add_extra_sim1) {
         et_add_extra_sim1.setText(SettingUtil.getAddExtraSim1());
 
         et_add_extra_sim1.addTextChangedListener(new TextWatcher() {
@@ -111,8 +93,9 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
     }
+
     //设置转发附加信息devicemark
-    private void editAddExtraSim2(final EditText et_add_extra_sim2){
+    private void editAddExtraSim2(final EditText et_add_extra_sim2) {
         et_add_extra_sim2.setText(SettingUtil.getAddExtraSim2());
 
         et_add_extra_sim2.addTextChangedListener(new TextWatcher() {
@@ -133,7 +116,6 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
     }
-
 
 
 }

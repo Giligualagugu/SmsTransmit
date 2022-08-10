@@ -6,10 +6,11 @@ import android.util.Log;
 
 public class SimUtil {
     private static String TAG = "SimUtil";
+
     //获取卡槽ID
     public static int getSimId(Bundle bundle) {
         int whichSIM = -1;
-        if(bundle==null){
+        if (bundle == null) {
             return whichSIM;
         }
 
@@ -19,8 +20,8 @@ public class SimUtil {
         if (whichSIM >= 0 && whichSIM < 5) {
             /*In some device Subscription id is return as subscriber id*/
             //TODO：不确定能不能直接返回
-            Log.d(TAG,"whichSIM >= 0 && whichSIM < 5："+whichSIM);
-        }else{
+            Log.d(TAG, "whichSIM >= 0 && whichSIM < 5：" + whichSIM);
+        } else {
             if (bundle.containsKey("simId")) {
                 whichSIM = bundle.getInt("simId");
             } else if (bundle.containsKey("com.android.phone.extra.slot")) {
@@ -38,6 +39,6 @@ public class SimUtil {
         }
 
 
-        return whichSIM+1;
+        return whichSIM + 1;
     }
 }

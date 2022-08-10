@@ -2,33 +2,29 @@ package com.tim.tsms.transpondsms.utils.sender;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.util.Log;
-
 import com.tim.tsms.transpondsms.model.SenderModel;
 import com.tim.tsms.transpondsms.model.SenderTable;
 import com.tim.tsms.transpondsms.utils.DbHelper;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class SenderUtil {
     static String TAG = "SenderUtil";
-    static Boolean hasInit=false;
+    static Boolean hasInit = false;
 
     static Context context;
     static DbHelper dbHelper;
     static SQLiteDatabase db;
 
     public static void init(Context context1) {
-        synchronized (hasInit){
-            if(hasInit)return;
-            hasInit=true;
+        synchronized (hasInit) {
+            if (hasInit) return;
+            hasInit = true;
             context = context1;
             dbHelper = new DbHelper(context);
             // Gets the data repository in write mode
@@ -52,7 +48,7 @@ public class SenderUtil {
     }
 
     public static long updateSender(SenderModel senderModel) {
-        if(senderModel==null) return 0;
+        if (senderModel == null) return 0;
 
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
@@ -64,7 +60,7 @@ public class SenderUtil {
         String selection = SenderTable.SenderEntry._ID + " = ? ";
         String[] whereArgs = {String.valueOf(senderModel.getId())};
 
-        return db.update(SenderTable.SenderEntry.TABLE_NAME,  values,selection,whereArgs);
+        return db.update(SenderTable.SenderEntry.TABLE_NAME, values, selection, whereArgs);
     }
 
     public static int delSender(Long id) {
@@ -72,9 +68,9 @@ public class SenderUtil {
         String selection = " 1 ";
         // Specify arguments in placeholder order.
         List<String> selectionArgList = new ArrayList<>();
-        if(id!=null){
+        if (id != null) {
             // Define 'where' part of query.
-            selection +=" and " + SenderTable.SenderEntry._ID + " = ? ";
+            selection += " and " + SenderTable.SenderEntry._ID + " = ? ";
             // Specify arguments in placeholder order.
             selectionArgList.add(String.valueOf(id));
 
@@ -85,7 +81,7 @@ public class SenderUtil {
 
     }
 
-    public static List<SenderModel> getSender(Long id,String key) {
+    public static List<SenderModel> getSender(Long id, String key) {
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
         String[] projection = {
@@ -100,16 +96,16 @@ public class SenderUtil {
         String selection = " 1 ";
         // Specify arguments in placeholder order.
         List<String> selectionArgList = new ArrayList<>();
-        if(id!=null){
+        if (id != null) {
             // Define 'where' part of query.
-            selection +=" and " + SenderTable.SenderEntry._ID + " = ? ";
+            selection += " and " + SenderTable.SenderEntry._ID + " = ? ";
             // Specify arguments in placeholder order.
             selectionArgList.add(String.valueOf(id));
         }
 
-        if(key!=null){
+        if (key != null) {
             // Define 'where' part of query.
-            selection =" and (" +  SenderTable.SenderEntry.COLUMN_NAME_NAME + " LIKE ? or "+ SenderTable.SenderEntry.COLUMN_NAME_JSON_SETTING + " LIKE ? ) ";
+            selection = " and (" + SenderTable.SenderEntry.COLUMN_NAME_NAME + " LIKE ? or " + SenderTable.SenderEntry.COLUMN_NAME_JSON_SETTING + " LIKE ? ) ";
             // Specify arguments in placeholder order.
             selectionArgList.add(key);
             selectionArgList.add(key);
@@ -130,7 +126,7 @@ public class SenderUtil {
                 sortOrder               // The sort order
         );
         List<SenderModel> tSenders = new ArrayList<>();
-        while(cursor.moveToNext()) {
+        while (cursor.moveToNext()) {
 
             long itemId = cursor.getLong(
                     cursor.getColumnIndexOrThrow(SenderTable.SenderEntry._ID));
@@ -144,7 +140,7 @@ public class SenderUtil {
                     cursor.getColumnIndexOrThrow(SenderTable.SenderEntry.COLUMN_NAME_JSON_SETTING));
             long itemTime = cursor.getLong(
                     cursor.getColumnIndexOrThrow(SenderTable.SenderEntry.COLUMN_NAME_TIME));
-            Log.d(TAG, "getSender: itemId"+itemId);
+            Log.d(TAG, "getSender: itemId" + itemId);
 
             SenderModel senderModel = new SenderModel();
             senderModel.setId(itemId);
@@ -170,9 +166,9 @@ public class SenderUtil {
         // Specify arguments in placeholder order.
         List<String> selectionArgList = new ArrayList<>();
 
-        if(key!=null){
+        if (key != null) {
             // Define 'where' part of query.
-            selection =" and (" +  SenderTable.SenderEntry.COLUMN_NAME_NAME + " LIKE ? or "+ SenderTable.SenderEntry.COLUMN_NAME_JSON_SETTING + " LIKE ? ) ";
+            selection = " and (" + SenderTable.SenderEntry.COLUMN_NAME_NAME + " LIKE ? or " + SenderTable.SenderEntry.COLUMN_NAME_JSON_SETTING + " LIKE ? ) ";
             // Specify arguments in placeholder order.
             selectionArgList.add(key);
             selectionArgList.add(key);
@@ -190,7 +186,7 @@ public class SenderUtil {
                 null,                   // don't filter by row groups
                 null               // The sort order
         );
-        int count=cursor.getCount();
+        int count = cursor.getCount();
         cursor.close();
         return count;
     }

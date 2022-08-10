@@ -8,11 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.RotateAnimation;
-import android.widget.AbsListView;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,21 +16,21 @@ import java.util.Date;
 /**
  * 自定义listview
  */
-public class ReFlashListView extends ListView  implements AbsListView.OnScrollListener {
+public class ReFlashListView extends ListView implements AbsListView.OnScrollListener {
     private static final String TAG = "ReFlashListView";
+    final int NONE = 0;// 正常状态；
+    final int PULL = 1;// 提示下拉状态；
+    final int RELESE = 2;// 提示释放状态；
+    final int REFLASHING = 3;// 刷新状态；
     View header;// 顶部布局文件；
     int headerHeight;// 顶部布局文件的高度；
     int firstVisibleItem;// 当前第一个可见的item的位置；
     int scrollState;// listview 当前滚动状态；
     boolean isRemark;// 标记，当前是在listview最顶端摁下的；
     int startY;// 摁下时的Y值；
-
     int state;// 当前的状态；
-    final int NONE = 0;// 正常状态；
-    final int PULL = 1;// 提示下拉状态；
-    final int RELESE = 2;// 提示释放状态；
-    final int REFLASHING = 3;// 刷新状态；
     IReflashListener iReflashListener;//刷新数据的接口
+
     public ReFlashListView(Context context) {
         super(context);
         // TODO Auto-generated constructor stub
@@ -257,14 +253,16 @@ public class ReFlashListView extends ListView  implements AbsListView.OnScrollLi
         lastupdatetime.setText(time);
     }
 
-    public void setInterface(IReflashListener iReflashListener){
+    public void setInterface(IReflashListener iReflashListener) {
         this.iReflashListener = iReflashListener;
     }
+
     /**
      * 刷新数据接口
+     *
      * @author Administrator
      */
-    public interface IReflashListener{
+    public interface IReflashListener {
         public void onReflash();
     }
 }

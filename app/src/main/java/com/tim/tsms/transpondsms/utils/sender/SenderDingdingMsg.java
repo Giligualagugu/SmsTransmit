@@ -3,31 +3,20 @@ package com.tim.tsms.transpondsms.utils.sender;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
+import com.alibaba.fastjson2.JSON;
+import com.tim.tsms.transpondsms.utils.SettingUtil;
+import okhttp3.*;
 
-
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import android.util.Base64;
-
-import com.alibaba.fastjson.JSON;
-import com.tim.tsms.transpondsms.utils.SettingUtil;
-
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 import static com.tim.tsms.transpondsms.SenderActivity.NOTIFY;
 
@@ -83,8 +72,8 @@ public class SenderDingdingMsg {
         });
     }
 
-    public static void sendMsg(final Handler handError, String token, String secret,String atMobiles,Boolean atAll, String msg) throws Exception {
-        Log.i(TAG, "sendMsg token:"+token+" secret:"+secret+" atMobiles:"+atMobiles+" atAll:"+atAll+" msg:"+msg);
+    public static void sendMsg(final Handler handError, String token, String secret, String atMobiles, Boolean atAll, String msg) throws Exception {
+        Log.i(TAG, "sendMsg token:" + token + " secret:" + secret + " atMobiles:" + atMobiles + " atAll:" + atAll + " msg:" + msg);
 
         if (token == null || token.isEmpty()) {
             return;
@@ -102,35 +91,35 @@ public class SenderDingdingMsg {
 
         }
 
-        Map textMsgMap =new HashMap();
-        textMsgMap.put("msgtype","text");
-        Map textText=new HashMap();
-        textText.put("content",msg);
-        textMsgMap.put("text",textText);
-        if(atMobiles != null || atAll !=null){
-            Map AtMap=new HashMap();
-            if(atMobiles!=null){
+        Map textMsgMap = new HashMap();
+        textMsgMap.put("msgtype", "text");
+        Map textText = new HashMap();
+        textText.put("content", msg);
+        textMsgMap.put("text", textText);
+        if (atMobiles != null || atAll != null) {
+            Map AtMap = new HashMap();
+            if (atMobiles != null) {
                 String[] atMobilesArray = atMobiles.split(",");
-                List<String> atMobilesList=new ArrayList<>();
-                for (String atMobile:atMobilesArray
-                     ) {
-                    if(TextUtils.isDigitsOnly(atMobile)){
+                List<String> atMobilesList = new ArrayList<>();
+                for (String atMobile : atMobilesArray
+                ) {
+                    if (TextUtils.isDigitsOnly(atMobile)) {
                         atMobilesList.add(atMobile);
                     }
                 }
-                if(!atMobilesList.isEmpty()){
-                    AtMap.put("atMobiles",atMobilesList);
+                if (!atMobilesList.isEmpty()) {
+                    AtMap.put("atMobiles", atMobilesList);
 
                 }
             }
 
-            AtMap.put("isAtAll",false);
-            if(atAll !=null){
-                AtMap.put("isAtAll",atAll);
+            AtMap.put("isAtAll", false);
+            if (atAll != null) {
+                AtMap.put("isAtAll", atAll);
 
             }
 
-            textMsgMap.put("at",AtMap);
+            textMsgMap.put("at", AtMap);
         }
 
         String textMsg = JSON.toJSONString(textMsgMap);
@@ -151,11 +140,11 @@ public class SenderDingdingMsg {
             public void onFailure(Call call, final IOException e) {
                 Log.d(TAG, "onFailure：" + e.getMessage());
 
-                if(handError != null){
+                if (handError != null) {
                     android.os.Message msg = new android.os.Message();
                     msg.what = NOTIFY;
                     Bundle bundle = new Bundle();
-                    bundle.putString("DATA","发送失败：" + e.getMessage());
+                    bundle.putString("DATA", "发送失败：" + e.getMessage());
                     msg.setData(bundle);
                     handError.sendMessage(msg);
                 }
@@ -168,11 +157,11 @@ public class SenderDingdingMsg {
                 final String responseStr = response.body().string();
                 Log.d(TAG, "Code：" + String.valueOf(response.code()) + responseStr);
 
-                if(handError != null){
+                if (handError != null) {
                     android.os.Message msg = new android.os.Message();
                     msg.what = NOTIFY;
                     Bundle bundle = new Bundle();
-                    bundle.putString("DATA","发送状态：" + responseStr);
+                    bundle.putString("DATA", "发送状态：" + responseStr);
                     msg.setData(bundle);
                     handError.sendMessage(msg);
                     Log.d(TAG, "Coxxyyde：" + String.valueOf(response.code()) + responseStr);

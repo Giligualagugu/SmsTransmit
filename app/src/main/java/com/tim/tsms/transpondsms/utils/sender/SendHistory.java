@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.util.Log;
-
 import com.tim.tsms.transpondsms.model.LogModel;
 import com.tim.tsms.transpondsms.model.LogTable;
 import com.tim.tsms.transpondsms.utils.DbHelper;
@@ -21,16 +20,16 @@ import java.util.Set;
 
 public class SendHistory {
     static String TAG = "SendHistory";
-    static Boolean hasInit=false;
+    static Boolean hasInit = false;
 
     static Context context;
     static DbHelper dbHelper;
     static SQLiteDatabase db;
 
     public static void init(Context context1) {
-        synchronized (hasInit){
-            if(hasInit)return;
-            hasInit=true;
+        synchronized (hasInit) {
+            if (hasInit) return;
+            hasInit = true;
             context = context1;
             dbHelper = new DbHelper(context);
             db = dbHelper.getReadableDatabase();
@@ -83,22 +82,22 @@ public class SendHistory {
         return db.insert(LogTable.LogEntry.TABLE_NAME, null, values);
     }
 
-    public static int delHistoryDb(Long id,String key) {
+    public static int delHistoryDb(Long id, String key) {
         // Define 'where' part of query.
         String selection = " 1 ";
         // Specify arguments in placeholder order.
         List<String> selectionArgList = new ArrayList<>();
-        if(id!=null){
+        if (id != null) {
             // Define 'where' part of query.
-            selection +=" and " + LogTable.LogEntry._ID + " = ? ";
+            selection += " and " + LogTable.LogEntry._ID + " = ? ";
             // Specify arguments in placeholder order.
             selectionArgList.add(String.valueOf(id));
 
         }
 
-        if(key!=null){
+        if (key != null) {
             // Define 'where' part of query.
-            selection =" and (" +  LogTable.LogEntry.COLUMN_NAME_FROM + " LIKE ? or "+ LogTable.LogEntry.COLUMN_NAME_CONTENT + " LIKE ? ) ";
+            selection = " and (" + LogTable.LogEntry.COLUMN_NAME_FROM + " LIKE ? or " + LogTable.LogEntry.COLUMN_NAME_CONTENT + " LIKE ? ) ";
             // Specify arguments in placeholder order.
             selectionArgList.add(key);
             selectionArgList.add(key);
@@ -109,7 +108,7 @@ public class SendHistory {
 
     }
 
-    public static String getHistoryDb(Long id,String key) {
+    public static String getHistoryDb(Long id, String key) {
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
         String[] projection = {
@@ -122,16 +121,16 @@ public class SendHistory {
         String selection = " 1 ";
         // Specify arguments in placeholder order.
         List<String> selectionArgList = new ArrayList<>();
-        if(id!=null){
+        if (id != null) {
             // Define 'where' part of query.
-            selection +=" and " + LogTable.LogEntry._ID + " = ? ";
+            selection += " and " + LogTable.LogEntry._ID + " = ? ";
             // Specify arguments in placeholder order.
             selectionArgList.add(String.valueOf(id));
         }
 
-        if(key!=null){
+        if (key != null) {
             // Define 'where' part of query.
-            selection =" and (" +  LogTable.LogEntry.COLUMN_NAME_FROM + " LIKE ? or "+ LogTable.LogEntry.COLUMN_NAME_CONTENT + " LIKE ? ) ";
+            selection = " and (" + LogTable.LogEntry.COLUMN_NAME_FROM + " LIKE ? or " + LogTable.LogEntry.COLUMN_NAME_CONTENT + " LIKE ? ) ";
             // Specify arguments in placeholder order.
             selectionArgList.add(key);
             selectionArgList.add(key);
@@ -152,13 +151,12 @@ public class SendHistory {
                 sortOrder               // The sort order
         );
         List<Long> tLogs = new ArrayList<>();
-        while(cursor.moveToNext()) {
+        while (cursor.moveToNext()) {
             long itemId = cursor.getLong(
                     cursor.getColumnIndexOrThrow(LogTable.LogEntry._ID));
             tLogs.add(itemId);
         }
         cursor.close();
-
 
 
         SharedPreferences sp = context.getSharedPreferences(Define.SP_MSG, Context.MODE_PRIVATE);

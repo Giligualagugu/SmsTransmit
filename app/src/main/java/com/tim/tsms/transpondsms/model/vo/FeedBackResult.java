@@ -7,7 +7,7 @@ public class FeedBackResult implements Serializable {
     String message;
     Object result;
 
-    public FeedBackResult(){
+    public FeedBackResult() {
 
     }
 
@@ -15,8 +15,8 @@ public class FeedBackResult implements Serializable {
         return message;
     }
 
-    public boolean isSuccess(){
-        return 1==code;
+    public boolean isSuccess() {
+        return 1 == code;
     }
 
     @Override

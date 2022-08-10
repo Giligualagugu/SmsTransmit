@@ -2,40 +2,29 @@ package com.tim.tsms.transpondsms.utils;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.util.Log;
-
-import com.tim.tsms.transpondsms.model.LogModel;
-import com.tim.tsms.transpondsms.model.LogTable;
-import com.tim.tsms.transpondsms.model.RuleModel;
-import com.tim.tsms.transpondsms.model.RuleTable;
-import com.tim.tsms.transpondsms.model.SenderModel;
-import com.tim.tsms.transpondsms.model.SenderTable;
+import com.tim.tsms.transpondsms.model.*;
 import com.tim.tsms.transpondsms.model.vo.LogVo;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class LogUtil {
     static String TAG = "LogUtil";
-    static Boolean hasInit=false;
+    static Boolean hasInit = false;
 
     static Context context;
     static DbHelper dbHelper;
     static SQLiteDatabase db;
 
     public static void init(Context context1) {
-        synchronized (hasInit){
-            if(hasInit)return;
-            hasInit=true;
+        synchronized (hasInit) {
+            if (hasInit) return;
+            hasInit = true;
             context = context1;
             dbHelper = new DbHelper(context);
             // Gets the data repository in write mode
@@ -45,9 +34,9 @@ public class LogUtil {
     }
 
     public static long addLog(LogModel logModel) {
-        Log.i(TAG, "addLog logModel: "+logModel);
+        Log.i(TAG, "addLog logModel: " + logModel);
         //不保存转发消息
-        if (logModel==null) return 0;
+        if (logModel == null) return 0;
 
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
@@ -61,22 +50,22 @@ public class LogUtil {
         return db.insert(LogTable.LogEntry.TABLE_NAME, null, values);
     }
 
-    public static int delLog(Long id,String key) {
+    public static int delLog(Long id, String key) {
         // Define 'where' part of query.
         String selection = " 1 ";
         // Specify arguments in placeholder order.
         List<String> selectionArgList = new ArrayList<>();
-        if(id!=null){
+        if (id != null) {
             // Define 'where' part of query.
-            selection +=" and " + LogTable.LogEntry._ID + " = ? ";
+            selection += " and " + LogTable.LogEntry._ID + " = ? ";
             // Specify arguments in placeholder order.
             selectionArgList.add(String.valueOf(id));
 
         }
 
-        if(key!=null){
+        if (key != null) {
             // Define 'where' part of query.
-            selection =" and (" +  LogTable.LogEntry.COLUMN_NAME_FROM + " LIKE ? or "+ LogTable.LogEntry.COLUMN_NAME_CONTENT + " LIKE ? ) ";
+            selection = " and (" + LogTable.LogEntry.COLUMN_NAME_FROM + " LIKE ? or " + LogTable.LogEntry.COLUMN_NAME_CONTENT + " LIKE ? ) ";
             // Specify arguments in placeholder order.
             selectionArgList.add(key);
             selectionArgList.add(key);
@@ -91,31 +80,31 @@ public class LogUtil {
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
         String[] projection = {
-                LogTable.LogEntry.TABLE_NAME+"."+BaseColumns._ID,
-                LogTable.LogEntry.TABLE_NAME+"."+LogTable.LogEntry.COLUMN_NAME_FROM,
-                LogTable.LogEntry.TABLE_NAME+"."+LogTable.LogEntry.COLUMN_NAME_TIME,
-                LogTable.LogEntry.TABLE_NAME+"."+LogTable.LogEntry.COLUMN_NAME_CONTENT,
-                LogTable.LogEntry.TABLE_NAME+"."+LogTable.LogEntry.COLUMN_NAME_JSON_EXTRA,
-                RuleTable.RuleEntry.TABLE_NAME+"."+RuleTable.RuleEntry.COLUMN_NAME_FILED,
-                RuleTable.RuleEntry.TABLE_NAME+"."+RuleTable.RuleEntry.COLUMN_NAME_CHECK,
-                RuleTable.RuleEntry.TABLE_NAME+"."+RuleTable.RuleEntry.COLUMN_NAME_VALUE,
-                SenderTable.SenderEntry.TABLE_NAME+"."+SenderTable.SenderEntry.COLUMN_NAME_NAME,
-                SenderTable.SenderEntry.TABLE_NAME+"."+SenderTable.SenderEntry.COLUMN_NAME_TYPE
+                LogTable.LogEntry.TABLE_NAME + "." + BaseColumns._ID,
+                LogTable.LogEntry.TABLE_NAME + "." + LogTable.LogEntry.COLUMN_NAME_FROM,
+                LogTable.LogEntry.TABLE_NAME + "." + LogTable.LogEntry.COLUMN_NAME_TIME,
+                LogTable.LogEntry.TABLE_NAME + "." + LogTable.LogEntry.COLUMN_NAME_CONTENT,
+                LogTable.LogEntry.TABLE_NAME + "." + LogTable.LogEntry.COLUMN_NAME_JSON_EXTRA,
+                RuleTable.RuleEntry.TABLE_NAME + "." + RuleTable.RuleEntry.COLUMN_NAME_FILED,
+                RuleTable.RuleEntry.TABLE_NAME + "." + RuleTable.RuleEntry.COLUMN_NAME_CHECK,
+                RuleTable.RuleEntry.TABLE_NAME + "." + RuleTable.RuleEntry.COLUMN_NAME_VALUE,
+                SenderTable.SenderEntry.TABLE_NAME + "." + SenderTable.SenderEntry.COLUMN_NAME_NAME,
+                SenderTable.SenderEntry.TABLE_NAME + "." + SenderTable.SenderEntry.COLUMN_NAME_TYPE
         };
         // Define 'where' part of query.
         String selection = " 1 ";
         // Specify arguments in placeholder order.
         List<String> selectionArgList = new ArrayList<>();
-        if(id!=null){
+        if (id != null) {
             // Define 'where' part of query.
-            selection +=" and " + LogTable.LogEntry.TABLE_NAME+"."+LogTable.LogEntry._ID + " = ? ";
+            selection += " and " + LogTable.LogEntry.TABLE_NAME + "." + LogTable.LogEntry._ID + " = ? ";
             // Specify arguments in placeholder order.
             selectionArgList.add(String.valueOf(id));
         }
 
-        if(key!=null){
+        if (key != null) {
             // Define 'where' part of query.
-            selection =" and (" +  LogTable.LogEntry.TABLE_NAME+"."+LogTable.LogEntry.COLUMN_NAME_FROM + " LIKE ? or "+ LogTable.LogEntry.TABLE_NAME+"."+LogTable.LogEntry.COLUMN_NAME_CONTENT + " LIKE ? ) ";
+            selection = " and (" + LogTable.LogEntry.TABLE_NAME + "." + LogTable.LogEntry.COLUMN_NAME_FROM + " LIKE ? or " + LogTable.LogEntry.TABLE_NAME + "." + LogTable.LogEntry.COLUMN_NAME_CONTENT + " LIKE ? ) ";
             // Specify arguments in placeholder order.
             selectionArgList.add(key);
             selectionArgList.add(key);
@@ -124,13 +113,13 @@ public class LogUtil {
 
         // How you want the results sorted in the resulting Cursor
         String sortOrder =
-                LogTable.LogEntry.TABLE_NAME+"."+LogTable.LogEntry._ID + " DESC";
+                LogTable.LogEntry.TABLE_NAME + "." + LogTable.LogEntry._ID + " DESC";
 
         Cursor cursor = db.query(
                 // The table to query
                 LogTable.LogEntry.TABLE_NAME
-                        +" JOIN "+RuleTable.RuleEntry.TABLE_NAME+" ON "+LogTable.LogEntry.TABLE_NAME+"."+LogTable.LogEntry.COLUMN_NAME_RULE_ID+"="+RuleTable.RuleEntry.TABLE_NAME+"."+RuleTable.RuleEntry._ID
-                        +" JOIN "+ SenderTable.SenderEntry.TABLE_NAME+" ON "+SenderTable.SenderEntry.TABLE_NAME+"."+SenderTable.SenderEntry._ID+"="+RuleTable.RuleEntry.TABLE_NAME+"."+RuleTable.RuleEntry.COLUMN_NAME_SENDER_ID,
+                        + " JOIN " + RuleTable.RuleEntry.TABLE_NAME + " ON " + LogTable.LogEntry.TABLE_NAME + "." + LogTable.LogEntry.COLUMN_NAME_RULE_ID + "=" + RuleTable.RuleEntry.TABLE_NAME + "." + RuleTable.RuleEntry._ID
+                        + " JOIN " + SenderTable.SenderEntry.TABLE_NAME + " ON " + SenderTable.SenderEntry.TABLE_NAME + "." + SenderTable.SenderEntry._ID + "=" + RuleTable.RuleEntry.TABLE_NAME + "." + RuleTable.RuleEntry.COLUMN_NAME_SENDER_ID,
                 projection,             // The array of columns to return (pass null to get all)
                 selection,              // The columns for the WHERE clause
                 selectionArgs,          // The values for the WHERE clause
@@ -140,39 +129,39 @@ public class LogUtil {
         );
 
 
-        Log.d(TAG, "getLog: "+db.getPath());
+        Log.d(TAG, "getLog: " + db.getPath());
         List<LogVo> LogVos = new ArrayList<>();
 
-        Log.d(TAG, "getLog: itemId cursor"+ Arrays.toString(cursor.getColumnNames()));
-        while(cursor.moveToNext()) {
+        Log.d(TAG, "getLog: itemId cursor" + Arrays.toString(cursor.getColumnNames()));
+        while (cursor.moveToNext()) {
             try {
                 String itemfrom = cursor.getString(
-                        cursor.getColumnIndex(LogTable.LogEntry.TABLE_NAME+"."+LogTable.LogEntry.COLUMN_NAME_FROM));
+                        cursor.getColumnIndex(LogTable.LogEntry.TABLE_NAME + "." + LogTable.LogEntry.COLUMN_NAME_FROM));
                 String content = cursor.getString(
-                        cursor.getColumnIndex(LogTable.LogEntry.TABLE_NAME+"."+LogTable.LogEntry.COLUMN_NAME_CONTENT));
+                        cursor.getColumnIndex(LogTable.LogEntry.TABLE_NAME + "." + LogTable.LogEntry.COLUMN_NAME_CONTENT));
                 String time = cursor.getString(
-                        cursor.getColumnIndex(LogTable.LogEntry.TABLE_NAME+"."+LogTable.LogEntry.COLUMN_NAME_TIME));
+                        cursor.getColumnIndex(LogTable.LogEntry.TABLE_NAME + "." + LogTable.LogEntry.COLUMN_NAME_TIME));
                 String jsonExtra = cursor.getString(
-                        cursor.getColumnIndex(LogTable.LogEntry.TABLE_NAME+"."+LogTable.LogEntry.COLUMN_NAME_JSON_EXTRA));
+                        cursor.getColumnIndex(LogTable.LogEntry.TABLE_NAME + "." + LogTable.LogEntry.COLUMN_NAME_JSON_EXTRA));
                 String ruleFiled = cursor.getString(
-                        cursor.getColumnIndex(RuleTable.RuleEntry.TABLE_NAME+"."+RuleTable.RuleEntry.COLUMN_NAME_FILED));
+                        cursor.getColumnIndex(RuleTable.RuleEntry.TABLE_NAME + "." + RuleTable.RuleEntry.COLUMN_NAME_FILED));
                 String ruleCheck = cursor.getString(
-                        cursor.getColumnIndex(RuleTable.RuleEntry.TABLE_NAME+"."+RuleTable.RuleEntry.COLUMN_NAME_CHECK));
+                        cursor.getColumnIndex(RuleTable.RuleEntry.TABLE_NAME + "." + RuleTable.RuleEntry.COLUMN_NAME_CHECK));
                 String ruleValue = cursor.getString(
-                        cursor.getColumnIndex(RuleTable.RuleEntry.TABLE_NAME+"."+RuleTable.RuleEntry.COLUMN_NAME_VALUE));
+                        cursor.getColumnIndex(RuleTable.RuleEntry.TABLE_NAME + "." + RuleTable.RuleEntry.COLUMN_NAME_VALUE));
                 String senderName = cursor.getString(
-                        cursor.getColumnIndex(SenderTable.SenderEntry.TABLE_NAME+"."+SenderTable.SenderEntry.COLUMN_NAME_NAME));
+                        cursor.getColumnIndex(SenderTable.SenderEntry.TABLE_NAME + "." + SenderTable.SenderEntry.COLUMN_NAME_NAME));
                 Integer senderType = cursor.getInt(
-                        cursor.getColumnIndex(SenderTable.SenderEntry.TABLE_NAME+"."+SenderTable.SenderEntry.COLUMN_NAME_TYPE));
+                        cursor.getColumnIndex(SenderTable.SenderEntry.TABLE_NAME + "." + SenderTable.SenderEntry.COLUMN_NAME_TYPE));
 
-                Log.d(TAG, "getLog: time"+time);
-                String rule = RuleModel.getRuleMatch(ruleFiled,ruleCheck,ruleValue)+" 转发到 "+senderName;
+                Log.d(TAG, "getLog: time" + time);
+                String rule = RuleModel.getRuleMatch(ruleFiled, ruleCheck, ruleValue) + " 转发到 " + senderName;
 //                String rule = time+" 转发到 "+senderName;
                 int senderImageId = SenderModel.getImageId(senderType);
-                LogVo logVo = new LogVo(itemfrom,content,time,rule,senderImageId,jsonExtra);
+                LogVo logVo = new LogVo(itemfrom, content, time, rule, senderImageId, jsonExtra);
                 LogVos.add(logVo);
-            }catch (Exception e){
-                Log.i(TAG, "getLog e:"+e.getMessage());
+            } catch (Exception e) {
+                Log.i(TAG, "getLog e:" + e.getMessage());
             }
 
         }

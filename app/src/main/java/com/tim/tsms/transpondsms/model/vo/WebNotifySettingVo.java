@@ -9,7 +9,7 @@ public class WebNotifySettingVo implements Serializable {
     public WebNotifySettingVo() {
     }
 
-    public WebNotifySettingVo(String token,String secret) {
+    public WebNotifySettingVo(String token, String secret) {
         this.token = token;
         this.secret = secret;
     }

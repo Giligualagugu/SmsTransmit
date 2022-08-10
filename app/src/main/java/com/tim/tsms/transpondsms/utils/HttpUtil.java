@@ -2,18 +2,16 @@ package com.tim.tsms.transpondsms.utils;
 
 
 import android.support.annotation.NonNull;
-
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.FileCallBack;
 import com.zhy.http.okhttp.callback.StringCallback;
+import okhttp3.Call;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-
-import okhttp3.Call;
-import okhttp3.Request;
-import okhttp3.Response;
 
 
 public class HttpUtil implements HttpI {
@@ -25,9 +23,9 @@ public class HttpUtil implements HttpI {
      * @param callBack 回调
      */
     public void asyncGet(@NonNull String url, @NonNull Map<String, String> params, @NonNull final Callback callBack) {
-        params.put("aaa","bbbbb");
-        params.put("ccc","ddd");
-        Map<String,String> headers = new HashMap<>();
+        params.put("aaa", "bbbbb");
+        params.put("ccc", "ddd");
+        Map<String, String> headers = new HashMap<>();
         OkHttpUtils.get()
                 .url(url)
                 .headers(headers)
@@ -54,10 +52,10 @@ public class HttpUtil implements HttpI {
      * @param callBack 回调
      */
     public void asyncPost(@NonNull String url, @NonNull Map<String, String> params, @NonNull final Callback callBack) {
-        params.put("eeee","fff");
-        params.put("gggg","hhhh");
-        Map<String,String> headers = new HashMap<>();
-        headers.put("heada","bb");
+        params.put("eeee", "fff");
+        params.put("gggg", "hhhh");
+        Map<String, String> headers = new HashMap<>();
+        headers.put("heada", "bb");
         OkHttpUtils.post()
                 .url(url)
                 .headers(headers)

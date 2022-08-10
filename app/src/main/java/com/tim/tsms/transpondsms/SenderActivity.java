@@ -8,25 +8,15 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Switch;
-import android.widget.Toast;
-
-import com.alibaba.fastjson.JSON;
+import android.widget.*;
+import com.alibaba.fastjson2.JSON;
 import com.tim.tsms.transpondsms.adapter.SenderAdapter;
 import com.tim.tsms.transpondsms.model.SenderModel;
 import com.tim.tsms.transpondsms.model.vo.DingDingSettingVo;
 import com.tim.tsms.transpondsms.model.vo.EmailSettingVo;
 import com.tim.tsms.transpondsms.model.vo.QYWXGroupRobotSettingVo;
 import com.tim.tsms.transpondsms.model.vo.WebNotifySettingVo;
-import com.tim.tsms.transpondsms.utils.sender.SenderDingdingMsg;
-import com.tim.tsms.transpondsms.utils.sender.SenderMailMsg;
-import com.tim.tsms.transpondsms.utils.sender.SenderQyWxGroupRobotMsg;
-import com.tim.tsms.transpondsms.utils.sender.SenderUtil;
-import com.tim.tsms.transpondsms.utils.sender.SenderWebNotifyMsg;
+import com.tim.tsms.transpondsms.utils.sender.*;
 import com.umeng.analytics.MobclickAgent;
 
 import java.text.SimpleDateFormat;
@@ -34,30 +24,27 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.tim.tsms.transpondsms.model.SenderModel.STATUS_ON;
-import static com.tim.tsms.transpondsms.model.SenderModel.TYPE_DINGDING;
-import static com.tim.tsms.transpondsms.model.SenderModel.TYPE_EMAIL;
-import static com.tim.tsms.transpondsms.model.SenderModel.TYPE_QYWX_GROUP_ROBOT;
-import static com.tim.tsms.transpondsms.model.SenderModel.TYPE_WEB_NOTIFY;
+import static com.tim.tsms.transpondsms.model.SenderModel.*;
 
 public class SenderActivity extends AppCompatActivity {
 
+    public static final int NOTIFY = 0x9731993;
     private String TAG = "SenderActivity";
     // 用于存储数据
     private List<SenderModel> senderModels = new ArrayList<>();
     private SenderAdapter adapter;
-    public static final int NOTIFY = 0x9731993;
     //消息处理者,创建一个Handler的子类对象,目的是重写Handler的处理消息的方法(handleMessage())
-    private Handler handler = new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case NOTIFY:
                     Toast.makeText(SenderActivity.this, msg.getData().getString("DATA"), Toast.LENGTH_LONG).show();
                     break;
             }
         }
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "oncreate");
@@ -79,9 +66,9 @@ public class SenderActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 SenderModel senderModel = senderModels.get(position);
-                Log.d(TAG, "onItemClick: "+senderModel);
+                Log.d(TAG, "onItemClick: " + senderModel);
 
-                switch (senderModel.getType()){
+                switch (senderModel.getType()) {
                     case TYPE_DINGDING:
                         setDingDing(senderModel);
                         break;
@@ -95,7 +82,7 @@ public class SenderActivity extends AppCompatActivity {
                         setQYWXGroupRobot(senderModel);
                         break;
                     default:
-                        Toast.makeText(SenderActivity.this,"异常的发送方类型！删除",Toast.LENGTH_LONG).show();
+                        Toast.makeText(SenderActivity.this, "异常的发送方类型！删除", Toast.LENGTH_LONG).show();
                         break;
                 }
 
@@ -137,6 +124,7 @@ public class SenderActivity extends AppCompatActivity {
         });
 
     }
+
     // 初始化数据
     private void initSenders() {
         senderModels = SenderUtil.getSender(null, null);
@@ -195,10 +183,10 @@ public class SenderActivity extends AppCompatActivity {
         if (dingDingSettingVo != null)
             editTextDingdingSecret.setText(dingDingSettingVo.getSecret());
         final EditText editTextDingdingAtMobiles = view1.findViewById(R.id.editTextDingdingAtMobiles);
-        if (dingDingSettingVo != null && dingDingSettingVo.getAtMobils()!=null)
+        if (dingDingSettingVo != null && dingDingSettingVo.getAtMobils() != null)
             editTextDingdingAtMobiles.setText(dingDingSettingVo.getAtMobils());
         final Switch switchDingdingAtAll = view1.findViewById(R.id.switchDingdingAtAll);
-        if (dingDingSettingVo != null && dingDingSettingVo.getAtAll()!=null)
+        if (dingDingSettingVo != null && dingDingSettingVo.getAtAll() != null)
             switchDingdingAtAll.setChecked(dingDingSettingVo.getAtAll());
 
         Button buttondingdingok = view1.findViewById(R.id.buttondingdingok);
@@ -273,7 +261,7 @@ public class SenderActivity extends AppCompatActivity {
                 Boolean atAll = switchDingdingAtAll.isChecked();
                 if (token != null && !token.isEmpty()) {
                     try {
-                        SenderDingdingMsg.sendMsg(handler, token, secret,atMobiles,atAll, "test@" + (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())));
+                        SenderDingdingMsg.sendMsg(handler, token, secret, atMobiles, atAll, "test@" + (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())));
                     } catch (Exception e) {
                         Toast.makeText(SenderActivity.this, "发送失败：" + e.getMessage(), Toast.LENGTH_LONG).show();
                         e.printStackTrace();
@@ -391,7 +379,7 @@ public class SenderActivity extends AppCompatActivity {
                 String toemail = editTextEmailToAdd.getText().toString();
                 if (!host.isEmpty() && !port.isEmpty() && !fromemail.isEmpty() && !pwd.isEmpty() && !toemail.isEmpty()) {
                     try {
-                        SenderMailMsg.sendEmail(handler,host,port,ssl,fromemail,pwd,toemail,"TranspondSms test", "test@" + (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())));
+                        SenderMailMsg.sendEmail(handler, host, port, ssl, fromemail, pwd, toemail, "TranspondSms test", "test@" + (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())));
                     } catch (Exception e) {
                         Toast.makeText(SenderActivity.this, "发送失败：" + e.getMessage(), Toast.LENGTH_LONG).show();
                         e.printStackTrace();
@@ -486,7 +474,7 @@ public class SenderActivity extends AppCompatActivity {
                 String secret = editTextWebNotifySecret.getText().toString();
                 if (!token.isEmpty()) {
                     try {
-                        SenderWebNotifyMsg.sendMsg(handler,token,secret,"TranspondSms test", "test@" + (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())));
+                        SenderWebNotifyMsg.sendMsg(handler, token, secret, "TranspondSms test", "test@" + (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())));
                     } catch (Exception e) {
                         Toast.makeText(SenderActivity.this, "发送失败：" + e.getMessage(), Toast.LENGTH_LONG).show();
                         e.printStackTrace();
@@ -514,7 +502,8 @@ public class SenderActivity extends AppCompatActivity {
         final EditText editTextQYWXGroupRobotName = view1.findViewById(R.id.editTextQYWXGroupRobotName);
         if (senderModel != null) editTextQYWXGroupRobotName.setText(senderModel.getName());
         final EditText editTextQYWXGroupRobotWebHook = view1.findViewById(R.id.editTextQYWXGroupRobotWebHook);
-        if (qywxGroupRobotSettingVo != null) editTextQYWXGroupRobotWebHook.setText(qywxGroupRobotSettingVo.getWebHook());
+        if (qywxGroupRobotSettingVo != null)
+            editTextQYWXGroupRobotWebHook.setText(qywxGroupRobotSettingVo.getWebHook());
 
         Button buttonQyWxGroupRobotOk = view1.findViewById(R.id.buttonQyWxGroupRobotOk);
         Button buttonQyWxGroupRobotDel = view1.findViewById(R.id.buttonQyWxGroupRobotDel);
@@ -576,7 +565,7 @@ public class SenderActivity extends AppCompatActivity {
                 String webHook = editTextQYWXGroupRobotWebHook.getText().toString();
                 if (!webHook.isEmpty()) {
                     try {
-                        SenderQyWxGroupRobotMsg.sendMsg(handler,webHook,"TranspondSms test", "test@" + (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())));
+                        SenderQyWxGroupRobotMsg.sendMsg(handler, webHook, "TranspondSms test", "test@" + (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())));
                     } catch (Exception e) {
                         Toast.makeText(SenderActivity.this, "发送失败：" + e.getMessage(), Toast.LENGTH_LONG).show();
                         e.printStackTrace();
